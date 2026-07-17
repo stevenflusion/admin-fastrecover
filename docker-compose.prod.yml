@@ -1,0 +1,41 @@
+# ============================================================
+# SH Fast Recover Admin Panel — Production Compose
+# Next.js SSR en puerto 3000 con Traefik reverse proxy
+# ============================================================
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+    image: fastrecover-admin-prod:latest
+    container_name: fastrecover-admin
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    networks:
+      - coolify
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.gzip.compress=true
+      - traefik.http.routers.http-0-admin.entryPoints=http
+      - traefik.http.routers.http-0-admin.middlewares=redirect-to-https
+      - traefik.http.routers.http-0-admin.rule=Host(`admin.shfastrecover.com`)
+      - traefik.http.routers.http-0-admin.service=http-0-admin
+      - traefik.http.routers.https-0-admin.entryPoints=https
+      - traefik.http.routers.https-0-admin.middlewares=gzip
+      - traefik.http.routers.https-0-admin.rule=Host(`admin.shfastrecover.com`)
+      - traefik.http.routers.https-0-admin.service=https-0-admin
+      - traefik.http.routers.https-0-admin.tls=true
+      - traefik.http.routers.https-0-admin.tls.certresolver=letsencrypt
+      - traefik.http.services.http-0-admin.loadbalancer.server.port=3000
+      - traefik.http.services.https-0-admin.loadbalancer.server.port=3000
+
+networks:
+  coolify:
+    external: true
