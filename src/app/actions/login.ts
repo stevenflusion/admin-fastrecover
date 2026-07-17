@@ -5,29 +5,18 @@ import { cookies } from "next/headers"
 const COOKIE_NAME = "auth-token"
 const EIGHT_HOURS_IN_SECONDS = 8 * 60 * 60
 
+const API_KEY = "55c9ff743d54395a4407eef0dd589db311275926c05cd1dad3540cd84963c715"
+const API_URL = "https://sh-api.happyground-63307e62.eastus.azurecontainerapps.io/api"
+
 export type LoginState = {
   success: boolean
   error?: string
 }
 
-/**
- * Server Action that authenticates an admin user against the backend API.
- *
- * The server-only API_KEY and API_URL are read from process.env, so they are
- * never exposed to the client bundle. On success the returned JWT is stored in
- * an httpOnly cookie.
- */
 export async function loginAction(
   _prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-  const apiKey = process.env.API_KEY
-  const apiUrl = process.env.API_URL
-
-  if (!apiKey || !apiUrl) {
-    return { success: false, error: "Configuración incompleta del servidor" }
-  }
-
   const email = formData.get("email")?.toString().trim() ?? ""
   const password = formData.get("password")?.toString() ?? ""
 
@@ -36,11 +25,11 @@ export async function loginAction(
   }
 
   try {
-    const response = await fetch(`${apiUrl}/users/login`, {
+    const response = await fetch(`${API_URL}/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-API-Key": apiKey,
+        "X-API-Key": API_KEY,
       },
       body: JSON.stringify({
         email_user: email,

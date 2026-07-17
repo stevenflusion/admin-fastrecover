@@ -4,11 +4,12 @@
 
 const isServer = typeof window === "undefined"
 
-const API_BASE = isServer
-  ? (process.env.API_URL ?? "https://sh-api.happyground-63307e62.eastus.azurecontainerapps.io/api")
-  : "/api/proxy"
+const API_URL = "https://sh-api.happyground-63307e62.eastus.azurecontainerapps.io/api"
+const API_KEY = "55c9ff743d54395a4407eef0dd589db311275926c05cd1dad3540cd84963c715"
 
-const SERVER_API_KEY = isServer ? process.env.API_KEY : undefined
+const API_BASE = isServer ? API_URL : "/api/proxy"
+
+const SERVER_API_KEY = isServer ? API_KEY : undefined
 
 export class ApiError extends Error {
   status: number

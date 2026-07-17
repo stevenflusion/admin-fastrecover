@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 
-const API_URL = process.env.API_URL
+const API_URL = "https://sh-api.happyground-63307e62.eastus.azurecontainerapps.io/api"
 
-const API_BASE = API_URL?.endsWith("/") ? API_URL : `${API_URL}/`
-const API_KEY = process.env.API_KEY
+const API_BASE = API_URL.endsWith("/") ? API_URL : `${API_URL}/`
+const API_KEY = "55c9ff743d54395a4407eef0dd589db311275926c05cd1dad3540cd84963c715"
 
-console.log("[PROXY] Boot — API_URL env:", process.env.API_URL)
+console.log("[PROXY] Boot — API_URL env:", API_URL)
 console.log("[PROXY] Boot — API_KEY defined:", !!API_KEY)
 console.log("[PROXY] Boot — computed API_BASE:", API_BASE)
 
