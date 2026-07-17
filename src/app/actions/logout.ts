@@ -5,17 +5,10 @@ import { redirect } from "next/navigation"
 
 const COOKIE_NAME = "auth-token"
 
-/**
- * Server Action that clears the auth session and redirects to the login page.
- *
- * The backend logout endpoint is called best-effort; even if it fails the
- * local cookie is removed so the user is signed out of the admin panel.
- */
 export async function logoutAction(): Promise<void> {
   const cookieStore = await cookies()
   const token = cookieStore.get(COOKIE_NAME)?.value
 
-  // Best-effort backend logout audit call.
   if (token) {
     const apiUrl = process.env.API_URL
     if (apiUrl) {
@@ -34,6 +27,5 @@ export async function logoutAction(): Promise<void> {
   }
 
   cookieStore.delete(COOKIE_NAME)
-  cookieStore.delete("magic-link-exp")
   redirect("/")
 }

@@ -1,6 +1,6 @@
 # SH Fast Recover | Admin Panel
 
-Panel de administración interno para SH Fast Recover. Gestión de leads, magic links, analytics y administración de usuarios.
+Panel de administración interno para SH Fast Recover. Gestión de leads, analytics y administración de usuarios.
 
 ## Stack Tecnológico
 
@@ -9,7 +9,7 @@ Panel de administración interno para SH Fast Recover. Gestión de leads, magic 
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
 - **Charts**: [Recharts](https://recharts.org/)
-- **Auth**: JWT + httpOnly cookies + Magic Links
+- **Auth**: JWT + httpOnly cookies
 - **Container**: Docker + Docker Compose
 
 ## Requisitos Previos
@@ -101,7 +101,6 @@ La aplicación envía los siguientes headers en todas las respuestas:
 - Cookie `secure` en producción (solo HTTPS)
 - Cookie `sameSite: lax`
 - Middleware de Next.js protege todas las rutas `/dashboard/*`
-- Magic links con expiración y monitoreo de sesión en tiempo real
 
 ## Despliegue en VPS (Hostinger)
 
@@ -206,17 +205,14 @@ El workflow `.github/workflows/deploy.yml` corre en un **self-hosted runner** en
 ├── src/
 │   ├── app/                    # Next.js App Router
 │   │   ├── actions/            # Server Actions (login, logout)
-│   │   ├── api/                # API Routes (proxy, health, auth)
-│   │   ├── auth/               # Magic link handling
+│   │   ├── api/                # API Routes (proxy, health)
 │   │   ├── dashboard/          # Rutas protegidas del panel
 │   │   ├── layout.tsx          # Root layout
 │   │   ├── page.tsx            # Login page
 │   │   └── globals.css         # Tailwind + tema
 │   ├── components/             # React components
 │   │   ├── ui/                 # shadcn/ui components
-│   │   ├── leads/              # Leads management
-│   │   ├── magic-links/        # Magic links management
-│   │   └── ...
+│   │   └── leads/              # Leads management
 │   ├── hooks/                  # Custom React hooks
 │   ├── lib/                    # Utilities, API client, types
 │   │   ├── api-client.ts       # Fetch wrapper con proxy

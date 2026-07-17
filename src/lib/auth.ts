@@ -7,15 +7,7 @@ export type AuthUser = {
   email_admin_users: string
 }
 
-export type MagicLinkUser = {
-  kind: "magic-link"
-  token_id: string
-  role: string
-  scopeId: string
-  destinationScreen: string
-}
-
-export type User = AuthUser | MagicLinkUser
+export type User = AuthUser
 
 /**
  * Decode a JWT payload without verifying the signature.
@@ -57,29 +49,6 @@ function toAuthUser(payload: Record<string, unknown>): AuthUser | null {
   }
 }
 
-function toMagicLinkUser(payload: Record<string, unknown>): MagicLinkUser | null {
-  const token_id = payload.token_id
-  const role = payload.role
-  const scopeId = payload.scopeId
-  const destinationScreen = payload.destinationScreen
-
-  if (
-    typeof token_id !== "string" ||
-    typeof role !== "string" ||
-    typeof scopeId !== "string"
-  ) {
-    return null
-  }
-
-  return {
-    kind: "magic-link",
-    token_id,
-    role,
-    scopeId,
-    destinationScreen: typeof destinationScreen === "string" ? destinationScreen : "",
-  }
-}
-
 /**
  * Read the auth-token cookie and return the decoded user info.
  *
@@ -96,7 +65,7 @@ export async function getAuthUser(): Promise<User | null> {
     const payload = decodeJwtPayload(token)
     if (!payload) return null
 
-    return toAuthUser(payload) ?? toMagicLinkUser(payload)
+    return toAuthUser(payload)
   } catch {
     return null
   }
